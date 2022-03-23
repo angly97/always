@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <!--부트스트랩 CSS/JS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="//code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+
+    <script>
+        $(function() {
+        $( ".animalDay" ).datepicker({
+            dateFormat: 'yy-mm-dd',
+            prevText: '이전 달',
+            nextText: '다음 달',
+            monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+            monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+            dayNames: ['일','월','화','수','목','금','토'],
+            dayNamesShort: ['일','월','화','수','목','금','토'],
+            dayNamesMin: ['일','월','화','수','목','금','토'],
+            showMonthAfterYear: true,
+            changeMonth: true,
+            changeYear: true,
+            yearSuffix: '년'
+        });
+        });
+    </script>
+
+    <style>
+
+        @font-face {
+            font-family: 'GmarketSansLight';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body{margin:0; font-family: 'GmarketSansLight', cursive;}          
+
+        /* 링크 걸었을 때 밑줄 표시 없도록 */ 
+        a{text-decoration: none;} 
+        li{list-style: none;}   
+
+        /* 메뉴 아이콘 만드는 부분*/ 
+        input[id="menuIcon"]{display: none; margin-left: 20px;}
+        input[id="menuIcon"]+label{
+            display: block;
+            width:25px;
+            height: 21px;
+            position: fixed;
+            left: 20px;
+            transition: all .35s;
+            cursor: pointer;
+        }
+        input[id="menuIcon"]+label span{
+            display: block;
+            position: absolute;
+            width:100%;
+            height: 2px;
+            background-color: white;
+            transition: all .35s;
+        }
+        input[id="menuIcon"]:checked+label{z-index:2; left:260px;}
+        input[id="menuIcon"]+label span:nth-child(1){ top:1px;}
+        input[id="menuIcon"]+label span:nth-child(2){ top:50%; transform: translateY(-50%);}
+        input[id="menuIcon"]+label span:nth-child(3){ bottom:1px;}
+        input[id="menuIcon"]:checked+label span:nth-child(1){top:50%; transform: translateY(-50%) rotate(45deg);}
+        input[id="menuIcon"]:checked+label span:nth-child(2){opacity:0;}
+        input[id="menuIcon"]:checked+label span:nth-child(3){bottom:50%;transform: translateY(50%) rotate(-45deg);}
+
+        /* 메뉴아이콘 누르면 나오는 메뉴창 */
+        .menuBar{       
+            width:250px; 
+            height: 360px;
+            background: #BEB5D3;
+            box-shadow: 2px 2px 5px rgb(182, 182, 182);
+            position:absolute;
+            top:0px;
+            left:-305px;
+            z-index: 1;
+            transition: all .35s;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            
+        }
+
+        /* 메뉴 아이콘 누르면 메뉴창 나오게 함*/
+        input[id="menuIcon"]:checked+label+div{ left:0;}
+        
+        /* 메뉴창 속 메뉴들 */
+        .menuItem{
+            width:100%;
+            height: 45px;
+            text-align: start;
+            line-height: 45px;
+            padding-left: 20px;
+            color: white;
+            font-weight: 800;
+            border-top: solid 1px white;
+        }
+        .menuItem:hover{background-color: rgba(255,255,255,0.2);}
+        .menuItem >a{color:white;}
+
+
+
+        /* 상단바 */ 
+        .dbgHeader{
+            position: relative;
+            display: flex;
+            align-items: center;
+            background-color: #BEB5D3;
+            text-align: center;
+        }
+
+        /* 상단바의 가운데 '또바기' 타이틀 */
+        .serviceTitle{
+            position:relative;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .serviceTitle>a{
+            font-size: 23px;
+            font-weight: bold;
+            color:white;
+            
+        }
+
+        /* 상단바 우측 초대장받기/고객센터/회원가입 버튼을 감싸는 span */
+        .headerBtns{
+            position: absolute;
+            right: 20px;
+        }
+
+        /* 초대장받기/고객센터/회원가입 버튼 */
+        .headerBtn{
+            font-size: 5px;
+            color:white;
+            margin: 0 2px;
+            padding: 4px 4px;
+
+            background-color: #BEB5D3;
+        }
+
+        /*초대장받기/고객센터/회원가입 버튼에 마우스 올릴 때 효과 */
+        .headerBtn:hover{
+            font-weight: bold;
+        }
+
+        /* 상단바 가장 우측의 로그인 버튼 */
+        .loginBtn{
+            font-size:5px;
+            color:white;
+            padding: 3px 10px 2px;
+            background-color: #BEB5D3;
+            border: 2px solid white;
+            border-radius: 3px;
+        }
+
+        /* 로그인 버튼에 마우스 올릴 때 효과 */
+        .loginBtn:hover{
+            font-weight: bold;
+            background-color: rgba(255,255,255,0.2);
+        }
+
+
+        /* 검색바 */
+        .searchBar{
+            position:relative;
+            background-color: #EFECF4;
+            padding: 15px;
+            text-align: center;
+        }
+
+        /* '언제나 한결같이 꼭 그렇게' 부분 */
+        .statement{
+            font-weight: 700;
+            color:rgb(150, 150, 150);
+        }
+
+        /* 검색창과 Search 버튼을 감싸는 span */
+        .searchForm{
+            position:absolute;
+            right: 20px;
+        }
+        /* 검색창 */
+        .searchInput{
+            border: 1px solid rgb(182, 182, 182);
+            border-radius: 3px;
+            font-size: 15px;
+            color:rgb(126, 126, 126);
+        }
+        /* Search버튼 */
+        .searchBtn{
+            font-size:5px;
+            font-weight: bold;
+            color:#939296;
+            padding: 2px 10px;
+
+            background-color: white;
+            border: 1px solid rgb(182, 182, 182);
+            border-radius: 3px;
+        }
+        /* Search버튼에 마우스 올릴 때 효과 */
+        .searchBtn:hover{
+            color:white;
+            font-weight: bold;
+            background-color: #BEB5D3;
+        }
+
+        footer{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            height: 150px;
+            width: 100%;
+            bottom:0;
+            background-color: #BEB5D3;
+
+        }
+
+        /* 우측에 고정된 위아래로 가는 버튼 */
+        #toUpDown{
+            z-index:50;
+            display: flex;
+            flex-direction: column;
+            position:fixed;
+            right: 20px;
+            top: 50%;
+        }
+        #toUpDown span{
+            margin: 15px;
+            padding: 8px 8px;
+            text-align: center;
+            border: solid 1px #BEB5D3;
+            border-radius: 100%;
+            color: #9c8ebd;
+        }
+        #toUpDown span a{ color:#9c8ebd;}
+        #toUpDown span a:hover{ color:white;}
+        #toUpDown span:hover{ background-color:#BEB5D3 ;}
+        
+        /* footer */
+        footer span{
+            font-size: 10px;
+            font-weight: 500;
+            color:white;
+            line-height: 30px;
+        }
+
+        a:link { color: white; text-decoration: none;}
+        a:visited { color: white; text-decoration: none;}
+        a:hover { color: white; text-decoration: underline;}
+    
+    </style>
+
+    {% block css %}
+
+    {% endblock %}
+    
+    <title>또바기</title>
+</head>
+<body onresize="parent.resizeTo(1280,800)" onload="parent.resizeTo(1280,800)">
+    {% load static %}
+    <header>
+        <!--상단바-->
+        <div class="dbgHeader">  
+            <!--메뉴 모양-->
+            <input type="checkbox" id="menuIcon">
+            <label for="menuIcon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <!--메뉴 아이콘 클릭 시 나옴-->
+            <div class="menuBar">
+                <div class="menuItem"><a href="{% url 'home' %}">Home</a></div>
+                <div class="menuItem"><a href="{% url 'normal' %}">일반관</a></div>
+                <div class="menuItem"><a href="{% url 'honor' %}">명예관</a></div>
+                <div class="menuItem"><a href="{% url 'free' %}">자유로운 영혼</a></div>
+                <div class="menuItem"><a href="{% url 'searchMap' %}">반려동물 장례 장소 검색</a></div>
+                <div class="menuItem"><a href="{% url 'q_and_a' %}">고객센터</a></div>
+                <div class="menuItem"><a href="{% url 'aboutUs' %}">About Us</a></div>
+            </div>
+            
+            <h1 class="serviceTitle"><a href="{% url 'home' %}">또바기</a></h1>
+            <span class="headerBtns" link="#726C7B", vlink="#726C7B", alink="#726C7B">
+                {% if not user.is_authenticated %} <!--등록된 유저가 아니라면-->
+                <span class="headerBtn"><a href="{% url 'signUp' %}">회원가입</a></span>
+                <span class="loginBtn"><a href="{% url 'login' %}">로그인</a></span>
+                {% endif %}
+                
+
+                {% if user.is_authenticated %} <!--등록된 유저가 맞다면-->
+                <span class="loginBtn"><a href="{% url 'logout' %}">로그아웃</a></span>
+                {% endif %}
+                <span class="headerBtn"><a href="{% url 'csCenter' %}">고객센터</a></span>
+            </span>
+        </div>
+
+        <!--검색바-->
+        <div class="searchBar">
+            <span class="statement">
+                언제나 한결같이 꼭 그렇게.
+            </span>
+
+            <!--검색창-->
+            <span class="searchForm">
+                <form action="{% url 'searchResult' %}" method="post">
+                    <!--Csrf 공격을 막기 위해 반드시 처음에 사용-->
+                    {%csrf_token%}
+                    
+                    <input type="text" class="searchInput" name="searchInput">
+                    <input type="submit" value="Search" class="searchBtn">
+                </form>
+            </span>
+        </div>
+    </header>   
+
+    <!--위로 가기/아래로 가기 버튼-->
+    <span id="toUpDown">
+        <span id="toUp">
+            <a href="#">
+            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/>
+              </svg>
+            </a>
+        </span>
+        <span id="toDown">
+            <a href="#scrollBottom">
+            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"/>
+              </svg>
+            </a>
+        </span>
+    </span>
+
+    {% block content %}
+    {% endblock %}
+
+    <div id="scrollBottom"></div>
+
+    <footer>
+        <span>
+            LIKELION 9th Team Project<br>
+            팀 또바기<br>
+            대표 이메일 ｜ 01yhgrace@naver.com
+        </span>
+        <span><br>
+            소속 ｜ 한국기술교육대학교<br>
+            주소 ｜ 충청남도 천안시 동남구 병천면 충절로 1600<br>
+            <br><br>
+        </span>
+        <span>
+            angly97@koreatech.ac.kr<br>
+            yy164946@naver.com<br>
+            ribertad21@gmail.com<br>
+            sarah001015@naver.com <br>
+        </span>
+    </footer>
+    
+
+</body>
+</html>

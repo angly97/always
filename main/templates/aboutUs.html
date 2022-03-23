@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+    <!-- 이 html에 추가되는 CSS -->
+    {% block css %}
+    <style>   
+
+        .aboutUsImg{
+            position: relative;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .aboutUsText{
+            position: absolute;
+            color: white;
+            margin-left: 80px;
+        }
+        .title{
+            font-size: 5vw;
+            font-weight: bold;
+        }
+        .subTitle{ font-size: 2vw; }
+        .info{
+            font-size: 2vw; 
+            line-height: 4vw;
+            margin: 10px 0;
+        }
+
+        .memberInfoTitleBox{
+            display: flex;
+            justify-content: flex-end;
+        }
+        .line{
+            width:50%;
+            height: 2px;
+            margin:70px 20px 30px 20px;
+            background-color: #BEB5D3;
+        }
+        .memberInfoTitle{
+            margin:70px 0 30px;
+            transform: translateY(-50%);
+            font-size: 2.5vw;
+            font-weight: bold;
+            color:#BEB5D3;
+        }
+        .memberInfoBox{
+            
+            display: flex;
+            justify-content: space-around;
+            align-content: space-between;
+            flex-wrap: wrap;
+
+            width: 100%;
+            padding: 50px;
+            margin-bottom: 70px;
+            background-color: #FAF8F8;
+
+        }
+        .emptyMember{
+            width: 400px; height: 100px;
+        }
+        .member{
+            display: flex;
+            justify-content: flex-end;
+            flex-wrap: nowrap;
+            margin: 30px 0;
+        }
+        .memberInfo{
+            text-align: end;
+            margin: 0 20px;
+            font-weight: 700;
+            color:#8d869e;
+        }
+
+        .memberImg img{
+            border: 2px solid #BEB5D3;
+            border-radius: 100%;
+        }
+    </style>
+    {% endblock %}
+
+
+
+    <!--본문 내용-->
+    {% block content %}
+        
+    {% load static %}
+
+    <div class="aboutUsImg">
+        <img src="{% static 'aboutusbackimg.JPG' %}" width="100%">
+
+        <div class=aboutUsText>
+            <div>
+                <span class="title">또바기</span>
+                <span class="subTitle"> : 언제나 한결같이 꼭 그렇게. </span>
+            </div>
+
+            <div class="info">
+                또바기는 반려동물과의 추억을 영원히 간질할 수 있는 공간입니다.<br>
+                사랑했던 반려동물에게 편지를 보내 함께한 순간을 기억하고,<br>
+                또바기에서 이별의 아픔을 치유하고 새로운 추억을 기록하시길 바랍니다.
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="memberInfoTitleBox">
+            <span class="line"></span>
+            <span class="memberInfoTitle">PROGRAMERS</span>
+        </div>
+        
+        <div class="memberInfoBox">
+
+            <span class="member">
+                <span class="memberInfo">
+                    한국기술교육대학교 21학번<br>
+                    최은혜 : 이름<br>
+                    팀장 : 역할<br><br>
+                    01yhgrace@naver.com : 이메일
+                </span>
+                <span>
+                    <span class="memberImg">
+                        <img src="{% static 'woman.jpg' %}" width="120px">
+                    </span>
+                </span>
+            </span>
+            <span class="member">
+                <span class="memberInfo">
+                    한국기술교육대학교 17학번<br>
+                    민초현 : 이름<br>
+                    팀원 : 역할<br><br>
+                    angly97@koreatech.ac.kr : 이메일
+                </span>
+                <span>
+                    <span class="memberImg">
+                        <img src="{% static 'woman.jpg' %}" width="120px">
+                    </span>
+                </span>
+            </span>
+            <span class="member">
+                <span class="memberInfo">
+                    한국기술교육대학교 17학번<br>
+                    윤영준 : 이름<br>
+                    팀원 : 역할<br><br>
+                    yy164946@naver.com : 이메일
+                </span>
+                <span>
+                    <span class="memberImg">
+                        <img src="{% static 'woman.jpg' %}" width="120px">
+                    </span>
+                </span>
+            </span>
+            <span class="member">
+                <span class="memberInfo">
+                    한국기술교육대학교 20학번<br>
+                    홍준하 : 이름<br>
+                    팀원 : 역할<br><br>
+                    sarah001015@naver.com : 이메일
+                </span>
+                <span>
+                    <span class="memberImg">
+                        <img src="{% static 'woman.jpg' %}" width="120px">
+                    </span>
+                </span>
+            </span>
+            <span class="member">
+                <span class="memberInfo"> 
+                    한국기술교육대학교 21학번<br>
+                    이준서 : 이름<br>
+                    팀원 : 역할<br><br>
+                    ribertad21@gmail.com : 이메일
+                </span>
+                <span>
+                    <span class="memberImg">
+                        <img src="{% static 'woman.jpg' %}" width="120px">
+                    </span>
+                </span>
+            </span>
+            
+            <span class="emptyMember"></span>
+
+        </div>
+
+
+
+    </div>
+    {% endblock %}

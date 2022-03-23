@@ -1,0 +1,373 @@
+{% extends 'base.html' %}
+
+    <!-- 이 html에 추가되는 CSS -->
+    {% block css %}
+    <style>
+        /* 현재 카테고리 설명하는 부분 */
+        .currentCategory{
+            margin: 30px;
+            color:#BEB5D3;
+            text-align: center;
+        }
+
+        /* 오늘 별이 된 아이들 감싸는 box */
+        .todayStar{
+            position: relative;
+            margin: 60px 65px;
+            padding: 0 75px;
+            text-align: center;
+        }
+        .todayStar>h3{
+            text-align: center;
+            margin:50px;
+            color:#BEB5D3;
+        }
+
+        /* 오늘 별이 된 아이들 슬라이드 구현 */
+        .slide_wrapper{
+            position: relative;
+            height: 320px;
+            margin: 30px auto;
+            overflow: hidden;
+
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+        .slides{
+            position: absolute;
+            left:0; top:0;
+            transition: left 0.5s ease-out;
+            padding:0;
+        }
+        .slides li:not(:last-child){
+            float:left;
+        }
+
+        /* 슬라이드 넘기기 구현 */
+        .controls{
+            text-align: center;
+        }
+        .controls span{    
+            position: absolute;
+            top:50%;
+            transform: translateY(-50%);
+            background-color:white;
+            color:#BEB5D3;
+            padding: 8px 12px;
+            margin:0 10px;
+            border: 1px solid #BEB5D3;
+            border-radius: 100%;
+        }
+        .controls span:hover{
+            color:white;
+            font-weight: bold;
+            background-color: #BEB5D3;
+        }
+        .controls span.prev{right:calc(100%); transform: translateX(180%);}
+        .controls span.next{left:calc(100%);transform: translateX(-180%);}
+        
+        /* 각 카드 */
+        .card{
+            width:230px; height:300px;
+            margin: 0 10px 50px 10px;
+            background-color: #EFECF4;
+            border-radius: 10px 10px 0 0;
+            border-style: none;
+            box-shadow: 2px 4px 12px 0 rgb(0 0 0 / 14%);
+
+        }
+        
+        .card-overlay{
+            position: relative;
+            display: flex;
+            justify-content: center;
+            width:230px; height:300px;
+            border-radius: 10px 10px 0 0;
+            z-index: 10;
+            background-color: rgba(162, 149, 172, 0.356);
+            opacity: 0;
+        }
+        .card-overlay:hover{ 
+            opacity: 1;
+            transition: all 0.25s;
+        }
+        .card-overlay span{
+            position: absolute;
+            top: 40%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.9);
+            background-color: rgba(162, 149, 172, 0.575);
+            border: 2px solid white;
+            border-radius: 5px;
+            padding: 4px 8px;
+            font-size: 15px;
+        }
+        /* 카드 속 동물 이미지 */
+        .card-img-top{ 
+            position:absolute;
+            width:100%;
+            height: 70%;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0 ;   
+            box-shadow: 2px 4px 12px 0 rgb(0 0 0 / 14%);
+        }
+        /* 카드 속 설명 */
+        .card-body{
+            position:absolute;
+            top:70%;
+            height: 30%;
+            text-align: center;
+        }
+        .slides .card-body{padding-left: 25px;}
+
+        .card-title{
+            font-weight: bold;
+            color: #9184b1;
+        }
+        .card-text{
+            font-size: 15.5px;
+            font-weight: 800;
+            color:gray;
+        }
+        /* 빈 카드 */
+        .emptyCard{
+            width:230px; height:300px;
+            margin: 0 20px 20px 0;
+            background-color: rgba(0, 0, 0, 0.0);
+        }
+
+        /* 동물들 목록 감싸는 box */
+        .animals{
+            padding: 90px;
+        }
+        /* 목록의 각 동물 */
+        .animals span{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .freeRegister{position: relative;}
+        .freeRegister span{
+            position: absolute;
+            right: 30px;
+            bottom: -50px;
+            color: #BEB5D3;;
+            padding: 5px;
+        }
+        .freeRegister p{
+            font-weight: bold;
+            font-size: 20px;
+            margin:5px;
+        }
+        .pgn{
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+        .page-link{color: #9184b1 !important; }
+        .page-link:hover{color: #736792;}
+
+    </style>
+    {% endblock %}
+
+
+    <!--본문 내용-->
+    {% block content %}
+
+    <div class="container">
+
+        <div class="currentCategory">
+            <h1>"<br>자유로운 영혼</h1><br>
+            <h6> 길고양이, 유기견, 로드킬 등으로 세상을 떠나<br>장례를 치르기 어려운 동물들을 추모할 수 있는 공간입니다.</h6>
+        </div>
+        <br>
+
+        {%if today_stars%}
+        <!--X월 XX일 별이 된 아이들-->
+        <div class="todayStar">
+            <h3>{{month}}월 {{day}}일 별이 된 아이들</h3>
+            
+            <!--X월 XX일 별이 된 아이들 슬라이드-->
+            <div class="slide_wrapper">
+                <ul class="slides">
+                    {%for today_star in today_stars%}
+                    <li>
+                        <!--bootstrap 카드 컴포넌트-->
+                        <div class="card">
+                            <div class="card-overlay">
+                                {% if not user.is_authenticated %}
+                                <a href="{% url 'login' %}"><span>MORE</span></a>
+                                {% endif %}
+                                {% if user.is_authenticated %}
+                                <a href="" onclick="pwin()"><span>MORE</span></a>
+                                {% endif %}
+                            </div>
+                            <img src="{{today_star.profile_photo.url}}" class="card-img-top" >
+                            <div class="card-body">
+                                <span>
+                                    <h5 class="card-title">{{today_star.name}}</h5>
+                                    <p class="card-text">{{today_star.birthday|date:"Y.m.d"}} ~ {{today_star.memorialday|date:"Y.m.d"}}</p>
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                    {%endfor%}   
+                </ul>
+            </div>
+
+            <!--슬라이드 넘기기 위한 이전, 다음 버튼-->
+            <p class="controls">
+                <span class="prev">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z"/>
+                        </svg>
+                </span>
+                <span class="next">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
+                        </svg>
+                </span>
+            </p>
+        </div>
+
+        <hr>
+        {%endif%}
+
+        <div class="animals">
+            <span>
+                {%for free_animal in free_animals%}
+                <div class="card">
+                    <div class="card-overlay">
+                        {% if not user.is_authenticated %}
+                        <a href="{% url 'login' %}"><span>MORE</span></a>
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                        <a href="" onclick="pwin()"><span>MORE</span></a>
+                        {% endif %}
+                    </div>
+                    <img src="{{free_animal.profile_photo.url}}" class="card-img-top" >
+                    <div class="card-body">
+                        <span>
+                            
+                            <h5 class="card-title">{{free_animal.name}}</h5>
+                            <p class="card-text">{{free_animal.birthday|date:"Y.m.d"}} ~ {{free_animal.memorialday|date:"Y.m.d"}}</p>
+                        </span>
+                    </div>
+                </div>
+                {%endfor%}
+                {%for _ in "x"|rjust:empty_num%}
+                <div class="emptyCard"></div>
+                {%endfor%}
+            </span>
+
+            <div class="freeRegister">
+                {% if user.is_authenticated %} <!--등록된 유저가 맞다면-->
+                <a href="{% url 'freeRegistration' %}">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+                            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
+                        </svg>
+                        <p>등록하기</p>
+                    </span>
+                </a>
+                {% endif %}
+                {% if not user.is_authenticated %}
+                <a href="{% url 'login' %}">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+                            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
+                        </svg>
+                        <p>등록하기</p>
+                    </span>
+                </a>
+                {% endif %}
+            </div>
+
+        </div>
+
+
+
+
+        <!--부트스트랩 Pagination 컴포넌트 -->
+        <div class="pgn">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                <!--이전 글이 있으면 -->
+                {% if free_animals.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{free_animals.previous_page_number}}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for p in "x"|rjust:free_animals.paginator.num_pages %}
+                    {% if forloop.counter == free_animals.number %}
+                    <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}" style="font-size: larger;">{{forloop.counter }}</a></li>
+                    
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                <!--다음 글이 있으면-->
+                {% if free_animals.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{free_animals.next_page_number}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+    
+    <!--X월 XX일 별이 된 아이들 카드 슬라이드 효과-->
+    <script> 
+        var slides=document.querySelector('.slides'),
+            slide=document.querySelectorAll('.slides li'),
+            currentIdx=0,
+            slideCount = slide.length,
+            prevBtn=document.querySelector('.prev'),
+            slideWidth=230,
+            slideMargin=20,
+            nextBtn=document.querySelector('.next'),
+            today_stars_num = parseInt("{{today_stars_num}}");      // view.py의 free함수에서 받은 오늘 별이 된 아이들 갯수 변수
+
+            // 슬라이드 너비를 위의 변수 크기에 따라 설정
+            document.querySelector('.slides').style.width = today_stars_num*(slideWidth + slideMargin)+'px'; 
+           
+            // 슬라이드 랩퍼 크기를 위으 변수 크기에 따라 설정
+            if(today_stars_num > 4){today_stars_num = 4;}
+            document.querySelector('.slide_wrapper').style.width = today_stars_num*(slideWidth + slideMargin)+'px';
+            
+            
+            function moveSlide(num){
+                slides.style.left =-num*(slideWidth+slideMargin)+'px';
+                currentIdx = num;
+            }
+            nextBtn.addEventListener('click', function(){
+                if(currentIdx<slideCount-(today_stars_num)){
+                    moveSlide(currentIdx+1);
+                }
+                else{
+                    moveSlide(0);
+                }
+            });
+            prevBtn.addEventListener('click', function(){
+                if(currentIdx>0){
+                    moveSlide(currentIdx-1);
+                }
+                else{
+                    moveSlide(slideCount-(today_stars_num));
+                }
+            });
+            
+    </script>
+    
+</div>
+
+{% endblock %}

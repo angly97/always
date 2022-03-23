@@ -1,0 +1,679 @@
+{% extends 'base.html' %}
+
+    <!-- 이 html에 추가되는 CSS -->
+    {% block css %}
+    <style>
+        .container{
+            height:1750px;
+        }
+
+        hr{
+            margin:20px 0 10px;
+        }
+
+        /* 오늘 별이 된 아이들 감싸는 box */
+        .todayStar{
+            position: relative;
+            margin: 60px 65px;
+        }
+        .todayStar>h3{
+            text-align: center;
+            color:#BEB5D3;
+            margin:50px;
+        }
+        
+        /* 오늘 별이 된 아이들 슬라이드 구현 */
+        .today-slide_wrapper{
+            position: relative;
+            height: 320px;
+            margin: 30px auto;
+            overflow: hidden;
+        }
+        .today-slides{
+            position: absolute;
+            left:0; top:0;
+            padding:0;
+        }
+        .today-slides.animated{
+            transition: 0.5s ease-out;
+        }
+        
+        .today-slides li{
+            float:left;
+        }
+        
+        /* today 슬라이드 넘기기 구현 */
+        .today-controls{
+            margin:0px;
+        }
+        .today-controls span{    
+            cursor:pointer;
+            position: absolute;
+            top:55%;
+            transform: translateY(-50%);
+            background-color:white;
+            color:#BEB5D3;
+            padding: 8px 12px;
+            margin:0 30px;
+            border: 1px solid #BEB5D3;
+            border-radius: 100%;
+        }
+        .today-controls span:hover{
+            color:white;
+            font-weight: bold;
+            background-color: #BEB5D3;
+        }
+        .today-controls span.today-prev{right:calc(100%); transform: translateX(180%);}
+        .today-controls span.today-next{left:calc(100%); transform: translateX(-180%);}
+        
+        #more{
+            position:relative;
+            left:84%;
+            color:#BEB5D3;
+            font-size:20px;
+
+            -webkit-user-select:none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /*자유로운 영혼이 된 아이들 감싸는 box*/
+        .freeStar{
+            position: relative;
+            margin: 60px 65px;
+        }
+        .freeStar>h3{
+            text-align: center;
+            color:#BEB5D3;
+            margin:50px;
+        }
+
+        /* 자유로운 영혼이 된 아이들 슬라이드 구현 */
+        .free-slide_wrapper{
+            position: relative;
+            height: 320px;
+            margin: 30px auto;
+            overflow: hidden;
+        }
+        .free-slides{
+            position: absolute;
+            left:0; top:0;
+            padding:0;
+        }
+        .free-slides.animated{
+            transition: left 0.5s ease-out;
+        }
+        .free-slides li{
+            float:left;
+        }
+
+        /* free 슬라이드 넘기기 구현 */
+        .free-controls{
+            margin:0;
+        }
+        .free-controls span{    
+            cursor:pointer;
+            position: absolute;
+            top:55%;
+            transform: translateY(-50%);
+            background-color:white;
+            color:#BEB5D3;
+            padding: 8px 12px;
+            margin:0 30px;
+            border: 1px solid #BEB5D3;
+            border-radius: 100%;
+        }
+        .free-controls span:hover{
+            color:white;
+            font-weight: bold;
+            background-color: #BEB5D3;
+        }
+        .free-controls span.free-prev{right:calc(100%); transform: translateX(180%);}
+        .free-controls span.free-next{left:calc(100%);transform: translateX(-180%);}
+
+        /*명예관 아이들 감싸는 box*/
+        .honorStar{
+            position: relative;
+            margin: 60px 65px;
+        }
+        .honorStar>h3{
+            text-align: center;
+            color:#BEB5D3;
+            margin:50px;
+        }
+
+        /*명예관 아이들 슬라이드 구현 */
+        .honor-slide_wrapper{
+            position: relative;
+            height: 320px;
+            margin: 30px auto;
+            overflow: hidden;
+        }
+        .honor-slides{
+            position: absolute;
+            left:0; top:0;
+            padding:0;
+        }
+        .honor-slides.animated{
+            transition: left 0.5s ease-out;
+        }
+        .honor-slides li{
+            float:left;
+        }
+
+        /* honor 슬라이드 넘기기 구현 */
+        .honor-controls{
+            margin:0px;
+        }
+        .honor-controls span{    
+            cursor:pointer;
+            position: absolute;
+            top:55%;
+            transform: translateY(-50%);
+            background-color:white;
+            color:#BEB5D3;
+            padding: 8px 12px;
+            margin:0 30px;
+            border: 1px solid #BEB5D3;
+            border-radius: 100%;
+        }
+        .honor-controls span:hover{
+            color:white;
+            font-weight: bold;
+            background-color: #BEB5D3;
+        }
+        .honor-controls span.honor-prev{right:calc(100%); transform: translateX(180%);}
+        .honor-controls span.honor-next{left:calc(100%);transform: translateX(-180%);}
+        
+        /* 각 카드 */
+        .card{
+            width:230px; height:320px;
+            margin: 0 23px 50px 0;
+            background-color: #EFECF4;
+            border-radius: 10px 10px 0 0;
+            border-style: none;
+            box-shadow: 2px 4px 12px 0 rgb(0 0 0 / 20%);
+            cursor:pointer;
+        }
+        .card-overlay{
+            position: relative;
+            display: flex;
+            justify-content: center;
+            width:230px; height:320px;
+            border-radius: 10px 10px 0 0;
+            z-index: 10;
+            background-color: rgba(162, 149, 172, 0.356);
+            opacity: 0;
+        }
+        .card-overlay:hover{ 
+            opacity: 1;
+            transition: all 0.25s;
+        }
+        .card-overlay span{
+            position: absolute;
+            top: 40%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.9);
+            background-color: rgba(162, 149, 172, 0.575);
+            border: 2px solid white;
+            border-radius: 5px;
+            padding: 4px 8px;
+            font-size: 15px;
+        }
+        /* 카드 속 동물 이미지 */
+        .card-img-top{ 
+            position:absolute;
+            width:100%;
+            height: 70%;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0 ;   
+            box-shadow: 2px 4px 12px 0 rgb(0 0 0 / 14%);
+        }
+        /* 카드 속 설명 */
+        .card-body{
+            width:100%;
+            position:absolute;
+            top:70%;
+            height: 30%;
+            text-align: center;
+        }
+        .slides .card-body{padding-left: 25px;}
+
+        .card-title{
+            font-weight: bold;
+            color: #9184b1;
+            text-align: center;
+        }
+        .honorCategory{
+            font-size:10px;
+            color:#FFE5FD;
+        }
+        .card-text{
+            font-size:15.5px;
+            font-weight: 800;
+            color:gray;
+        }
+
+    </style>
+    {% endblock %}
+
+
+    <!--본문 내용-->
+    {% block content %}
+    <br><br>
+    <div class="container">
+
+       
+        <!--X월 XX일 별이 된 아이들-->
+        <div class="todayStar">
+            <h3>{{month}}월 {{day}}일 별이 된 아이들</h3>
+
+            <!--X월 XX일 별이 된 아이들 슬라이드-->
+            <div class="today-slide_wrapper">
+                <ul class="today-slides">
+                    {%if today_stars%}
+                    {%for today_star in today_stars%}
+                    <li>
+                        <!--bootstrap 카드 컴포넌트-->
+                        <div class="card">
+                            <div class="card-overlay">
+                                {% if not user.is_authenticated %}
+                                <a href="{% url 'login' %}"><span>MORE</span></a>
+                                {% endif %}
+                                {% if user.is_authenticated %}
+                                <a href="" onclick="pwin()"><span>MORE</span></a>
+                                {% endif %}
+                            </div>
+                            <img src="{{today_star.profile_photo.url}}" class="card-img-top" >
+                            <div class="card-body">
+                                <span>
+                                    <h5 class="card-title">{{today_star.name}}</h5>
+                                    <p class="card-text">{{today_star.birthday|date:"Y.m.d"}} ~ {{today_star.memorialday|date:"Y.m.d"}}</p>
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                    {%endfor%}
+                    {% endif %}
+                </ul>
+            </div>
+          
+            
+            <!--today 슬라이드 넘기기 위한 이전, 다음 버튼-->
+            <p class="today-controls">
+                <span class="today-prev">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z"/>
+                    </svg>
+                </span>
+                <span class="today-next">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
+                    </svg>
+                </span>
+            </p>
+
+        
+        </div>
+        <a href="{% url 'normal' %}", id = "more">별이 된 동물들 더보기</a>
+        
+        <!--today 카드 슬라이드 효과-->
+        <script>
+            var slides=document.querySelector('.today-slides'),
+                slide=document.querySelectorAll('.today-slides li'),
+                currentIdx = 0,
+                slideCount = slide.length,
+                slideWidth = 230,
+                slideMargin = 22.8,
+                prevBtn=document.querySelector('.today-prev'),
+                nextBtn=document.querySelector('.today-next'),
+                today_stars_num = parseInt("{{today_stars_num}}");
+
+                document.querySelector('.today-slides').style.width = today_stars_num*(slideWidth + slideMargin)+'px';
+
+                if(today_stars_num > 4){today_stars_num = 4;}
+                document.querySelector('.today-slide_wrapper').style.width = today_stars_num*(slideWidth + slideMargin)+'px';
+
+            makeClone();
+
+            function makeClone(){
+                for(var i = 0; i<slideCount; i++){
+                    var cloneSlide = slide[i].cloneNode(true);
+                    cloneSlide.classList.add('clone');
+                    slides.appendChild(cloneSlide);
+                }
+                for(var i = slideCount -1; i>=0; i--){
+                    var cloneSlide = slide[i].cloneNode(true);
+                    cloneSlide.classList.add('clone');
+                    slides.prepend(cloneSlide);
+                }
+                updateWidth();
+                setInitialPos();
+
+                setTimeout(function(){
+                    slides.classList.add('animated');
+                },100);
+            }
+
+            function updateWidth(){
+                var currentSlides = document.querySelectorAll('.today-slides li');
+                var newSlideCount = currentSlides.length;
+                var newWidth  = (slideWidth + slideMargin)*newSlideCount - slideMargin +'px';
+                slides.style.width = newWidth;
+            }
+            function setInitialPos(){
+                var initialTranslateValue = -(slideWidth + slideMargin)*slideCount;
+                slides.style.transform = 'translateX(' + initialTranslateValue+'px)';
+            }
+
+            nextBtn.addEventListener('click',function(){
+                moveSlide(currentIdx + 1);
+            });
+            prevBtn.addEventListener('click',function(){
+                moveSlide(currentIdx - 1);
+            });
+
+            function moveSlide(num){
+                slides.style.left = -num * (slideWidth + slideMargin) + 'px';
+                currentIdx = num;
+                console.log(currentIdx, slideCount);
+                
+                if(currentIdx == slideCount || currentIdx == -slideCount){
+                    setTimeout(function(){
+                        slides.classList.remove('animated');
+                        slides.style.left = '0px';
+                        currentIdx = 0;
+                    },500);
+                    setTimeout(function(){
+                        slides.classList.add('animated');
+                    },600);
+                }
+            }
+            
+            var timer = undefined;
+
+            function autoSlide(){
+                if(timer == undefined){
+                    timer = setInterval(function(){
+                        moveSlide(currentIdx + 1);
+                    }, 3000);
+                }
+            }
+            autoSlide();
+
+        </script>
+        <hr>
+        <br>
+        <!--자유로운 영혼-->
+        <div class="freeStar">
+            <h3><a href="{% url 'free' %}" style="color:#BEB5D3;">자유로운 영혼</a></h3>
+            
+            <!--자유로운 영혼 슬라이드-->
+            <div class="free-slide_wrapper">
+                <ul class="free-slides">
+                    {%for free_animal in free_animals%}
+                    <li>
+                        <!--bootstrap 카드 컴포넌트-->
+                        <div class="card">
+                            <div class="card-overlay">
+                                {% if not user.is_authenticated %}
+                                <a href="{% url 'login' %}"><span>MORE</span></a>
+                                {% endif %}
+                                {% if user.is_authenticated %}
+                                <a href="" onclick="pwin()"><span>MORE</span></a>
+                                {% endif %}
+                            </div>
+                            <img src="{{free_animal.profile_photo.url}}" class="card-img-top" >
+                            <div class="card-body">
+                                <span>
+                                    <h5 class="card-title">{{free_animal.name}}</h5>
+                                    <p class="card-text">{{free_animal.birthday|date:"Y.m.d"}} ~ {{free_animal.memorialday|date:"Y.m.d"}}</p>
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                    {%endfor%}   
+                </ul>
+            </div>
+
+            <!--free 슬라이드 넘기기 위한 이전, 다음 버튼-->
+            <p class="free-controls">
+                <span class="free-prev">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z"/>
+                    </svg>
+                </span>
+                <span class="free-next">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
+                    </svg>
+                </span>
+            </p>
+        </div>
+        <!--free 카드 슬라이드 효과-->
+        <script>
+            var freeSlides=document.querySelector('.free-slides'),
+                freeSlide=document.querySelectorAll('.free-slides li'),
+                freeCurrentIdx=0,
+                freeSlideCount = freeSlide.length,
+                freeSlideWidth=230,
+                freeSlideMargin=22.3,
+                freePrevBtn=document.querySelector('.free-prev'),
+                freeNextBtn=document.querySelector('.free-next'),
+                free_animals_num = parseInt("{{free_animals_num}}");
+
+                document.querySelector('.free-slides').style.width = free_animals_num*(freeSlideWidth + freeSlideMargin)+'px'; 
+
+                if(free_animals_num > 4){free_animals_num = 4;}
+                document.querySelector('.free-slide_wrapper').style.width = free_animals_num*(freeSlideWidth + freeSlideMargin)+'px';
+
+            makeFreeClone();
+
+            function makeFreeClone(){
+                for(var i = 0; i<freeSlideCount; i++){
+                    var freeCloneSlide = freeSlide[i].cloneNode(true);
+                    freeCloneSlide.classList.add('free-clone');
+                    freeSlides.appendChild(freeCloneSlide);
+                }
+                for(var i = freeSlideCount -1; i>=0; i--){
+                    var freeCloneSlide = freeSlide[i].cloneNode(true);
+                    freeCloneSlide.classList.add('free-clone');
+                    freeSlides.prepend(freeCloneSlide);
+                }
+                updateFreeWidth();
+                setFreeInitialPos();
+
+                setTimeout(function(){
+                    freeSlides.classList.add('animated');
+                },100);
+            }
+
+            function updateFreeWidth(){
+                var currentFreeSlides = document.querySelectorAll('.free-slides li');
+                var newFreeSlideCount = currentFreeSlides.length;
+                var newFreeWidth  = (freeSlideWidth + freeSlideMargin)*newFreeSlideCount - freeSlideMargin +'px';
+                freeSlides.style.width = newFreeWidth;
+            }
+            function setFreeInitialPos(){
+                var freeInitialTranslateValue = -(freeSlideWidth + freeSlideMargin)*freeSlideCount;
+                freeSlides.style.transform = 'translateX(' + freeInitialTranslateValue+'px)';
+            }
+
+            freeNextBtn.addEventListener('click',function(){
+                freeMoveSlide(freeCurrentIdx + 1);
+            });
+            freePrevBtn.addEventListener('click',function(){
+                freeMoveSlide(freeCurrentIdx - 1);
+            });
+
+            function freeMoveSlide(num){
+                freeSlides.style.left = -num * (freeSlideWidth + freeSlideMargin) + 'px';
+                freeCurrentIdx = num;
+                console.log(freeCurrentIdx, freeSlideCount);
+                
+                if(freeCurrentIdx == freeSlideCount || freeCurrentIdx == -freeSlideCount){
+                    setTimeout(function(){
+                        freeSlides.classList.remove('animated');
+                        freeSlides.style.left = '0px';
+                        freeCurrentIdx = 0;
+                    },500);
+                    setTimeout(function(){
+                        freeSlides.classList.add('animated');
+                    },600);
+                }
+            }
+            
+            var freeTimer = undefined;
+
+            function freeAutoSlide(){
+                if(freeTimer == undefined){
+                    freeTimer = setInterval(function(){
+                        freeMoveSlide(freeCurrentIdx + 1);
+                    }, 3000);
+                }
+            }
+            freeAutoSlide();
+                
+        </script>
+        <hr>
+        <br>
+        <!--명예관-->
+        <div class="honorStar">
+            <h3><a href="{% url 'honor' %}" style="color:#BEB5D3;">명예관</a></h3>
+            
+            <!--명예관 아이들 슬라이드-->
+            <div class="honor-slide_wrapper">
+                <ul class="honor-slides">
+                    {%for honor_animal in honor_animals%}
+                    <li>
+                        <!--bootstrap 카드 컴포넌트-->
+                        <div class="card">
+                            <div class="card-overlay">
+                                {% if not user.is_authenticated %}
+                                <a href="{% url 'login' %}"><span>MORE</span></a>
+                                {% endif %}
+                                {% if user.is_authenticated %}
+                                <a href="" onclick="pwin()"><span>MORE</span></a>
+                                {% endif %}
+                            </div>
+                            <img src="{{honor_animal.profile_photo.url}}" class="card-img-top" >
+                            <div class="card-body">
+                                <span>
+                                    <h5 class="card-title">{{honor_animal.name}}</h5>
+                                    <p class="card-text">{{honor_animal.birthday|date:"Y.m.d"}} ~ {{honor_animal.memorialday|date:"Y.m.d"}}</p>
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                    {%endfor%}   
+                </ul>
+            </div>
+
+            <!--honor 슬라이드 넘기기 위한 이전, 다음 버튼-->
+            <p class="honor-controls">
+                <span class="honor-prev">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z"/>
+                    </svg>
+                </span>
+                <span class="honor-next">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
+                    </svg>
+                </span>
+            </p>
+        </div>
+
+        <!--honor 카드 슬라이드 효과-->
+        <script>
+            var honorSlides=document.querySelector('.honor-slides'),
+                honorSlide=document.querySelectorAll('.honor-slides li'),
+                honorCurrentIdx=0,
+                honorSlideCount = honorSlide.length,
+                honorSlideWidth=230,
+                honorSlideMargin=22.3,
+                honorPrevBtn=document.querySelector('.honor-prev'),
+                honorNextBtn=document.querySelector('.honor-next'),
+                honor_animals_num = parseInt("{{honor_animals_num}}");
+
+                document.querySelector('.honor-slides').style.width = honor_animals_num*(honorSlideWidth + honorSlideMargin)+'px'; 
+           
+                if(honor_animals_num > 4){honor_animals_num = 4;}
+                document.querySelector('.honor-slide_wrapper').style.width = honor_animals_num*(honorSlideWidth + honorSlideMargin)+'px';
+                
+            makeHonorClone();
+
+            function makeHonorClone(){
+                for(var i = 0; i<honorSlideCount; i++){
+                    var honorCloneSlide = honorSlide[i].cloneNode(true);
+                    honorCloneSlide.classList.add('honor-clone');
+                    honorSlides.appendChild(honorCloneSlide);
+                }
+                for(var i = honorSlideCount -1; i>=0; i--){
+                    var honorCloneSlide = honorSlide[i].cloneNode(true);
+                    honorCloneSlide.classList.add('honor-clone');
+                    honorSlides.prepend(honorCloneSlide);
+                }
+                updateHonorWidth();
+                setHonorInitialPos();
+
+                setTimeout(function(){
+                    honorSlides.classList.add('animated');
+                },100);
+            }
+
+            function updateHonorWidth(){
+                var currentHonorSlides = document.querySelectorAll('.honor-slides li');
+                var newHonorSlideCount = currentHonorSlides.length;
+                var newHonorWidth  = (honorSlideWidth + honorSlideMargin)*newHonorSlideCount - honorSlideMargin +'px';
+                honorSlides.style.width = newHonorWidth;
+            }
+            function setHonorInitialPos(){
+                var honorInitialTranslateValue = -(honorSlideWidth + honorSlideMargin)*honorSlideCount;
+                honorSlides.style.transform = 'translateX(' + honorInitialTranslateValue+'px)';
+            }
+
+            honorNextBtn.addEventListener('click',function(){
+                honorMoveSlide(honorCurrentIdx + 1);
+            });
+            honorPrevBtn.addEventListener('click',function(){
+                honorMoveSlide(honorCurrentIdx - 1);
+            });
+
+             function honorMoveSlide(num){
+                honorSlides.style.left = -num * (honorSlideWidth + honorSlideMargin) + 'px';
+                honorCurrentIdx = num;
+                console.log(honorCurrentIdx, honorSlideCount);
+                
+                if(honorCurrentIdx == honorSlideCount || honorCurrentIdx == -honorSlideCount){
+                    setTimeout(function(){
+                        honorSlides.classList.remove('animated');
+                        honorSlides.style.left = '0px';
+                        honorCurrentIdx = 0;
+                    },500);
+                    setTimeout(function(){
+                        honorSlides.classList.add('animated');
+                    },600);
+                }
+            }
+                
+            var honorTimer = undefined;
+    
+            function honorAutoSlide(){
+                if(honorTimer == undefined){
+                    honorTimer = setInterval(function(){
+                        honorMoveSlide(honorCurrentIdx + 1);
+                    }, 3000);
+                }
+            }
+            honorAutoSlide();
+            
+        </script>
+        <hr>
+
+    </div>
+    
+</div>
+
+{% endblock %}

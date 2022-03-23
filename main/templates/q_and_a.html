@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+    <!-- 이 html에 추가되는 CSS -->
+    {% block css %}
+    <style>
+    .container{
+      margin:10px auto;
+    }
+    .csCenterTitle{
+        margin: 80px 90px 0;
+        color:#726C7B;
+        font-weight: bold;
+        font-size: 3vw;
+    }
+    .csCenter{color:#9f97b1;}
+    .accordion{
+      display: flex;
+      flex-direction:column;
+    }
+    .accordion-button:focus{
+      z-index:0;
+      border-color: white;
+    }
+    .accordion-button:not(.collapsed){
+      background-color:white;
+      color:#726C7B;
+    }
+    .accordion-button{
+      width: 100%;
+     height: 40 px;
+      padding: 10px;
+      border-color: #ADAAB1;
+      border-width:2px;
+      background-color: #FFFFFF;
+      margin: 0px;
+      text-align:left;
+      position:center;
+      color:#726C7B;
+    }
+    .accordion-body{
+      background-color:#BEB5D3;  /*답변 색*/
+      color:#FFFFFF;
+    }
+    /* footer 아래 고정 */
+    html,body{
+      height: 100%;
+    }
+    body{
+      display:flex;
+      flex-direction: column;
+    }
+    footer{
+      flex-shrink: 0;
+    }
+    .container{
+      flex: 1;
+    }
+    .accordion{
+        margin:auto;
+    }
+    </style>
+    {% endblock %}
+
+
+
+    <!--본문 내용-->
+    {% block content %}
+        
+    {% load static %}
+
+    <div class="container">
+        <div class="csCenterTitle">
+            <span class="csCenter">
+            자주 묻는 질문</span>
+        </div>
+        <hr><br><br>
+
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="flush-headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                  Q. 동물 등록은 어떻게 하나요?
+                </button>
+              </h2>
+              <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body"><br><br>A. 홈페이지의 상단 바의 오른쪽에 위치한 '초대장 받기'를 누르시면 동물을 등록하실 수 있습니다.
+                  회원님의 개인 반려동물에 대한 등록은 '일반관'을 통해 가능하십니다.
+                  <br><br>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="flush-headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                    Q. 내가 등록한 동물 한마리만 확인이 가능합니다. 다른 동물들은 어떻게 보나요?
+                </button>
+              </h2>
+              <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body"><br><br>A. 총 2가지 방법으로 확인 가능합니다. 
+                  <br><br>먼저 첫번째 방법으로는 홈페이지 상단 오른쪽의 자신의 프로필을 클릭하시면 마이페이지 팝업 창이 뜹니다. 이 창의 책갈피를 보시면 회원님이 등록하신 동물들을 확인하실 수 있습니다. 보고자 하시는 동물의 책갈피를 누르시면 각 동물의 창으로 넘어가 해당 동물에 대한 내용을 확인하실 수 있습니다.
+                  <br><br>2번째 방법으로는 해당 동물의 이름을 홈페이지 상단의 검색을 통해 검색하신 후 동물을 찾아 확인 가능합니다.
+                  <br><br>첫번째 방법으로 하시는 것이 더 찾기 편하실겁니다.
+                  <br><br>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="flush-headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                    Q. 등록한 동물 관리는 어디서 하나요?
+                </button>
+              </h2>
+              <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body"><br><br>A. 마이페이지에서 관리가 가능합니다.<br><br></div>
+              </div>
+            </div>
+          </div>
+    </div>
+    {% endblock %}

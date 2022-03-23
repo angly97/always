@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+    <!-- 이 html에 추가되는 CSS -->
+    {% block css %}
+    <style>
+    .container{
+      margin:10px auto;
+    }
+    .csCenterTitle{
+        margin: 80px 90px 0;
+        color:#726C7B;
+        font-weight: bold;
+        font-size: 3vw;
+        width: 70%;
+    }
+    .csCenter{color:#9f97b1;}
+    .list{
+      display: flex;
+      flex-direction:column;
+    }
+    .button{
+      width: 100%;
+      height: 40 px;
+      padding: 10px;
+      border-color: #ADAAB1;
+      border-width:2px;
+      background-color: #FFFFFF;
+      margin: 0px;
+      text-align:left;
+      position:center;
+      color:#726C7B;
+    }
+    /* footer 아래 고정 */
+    html,body{
+            height: 100%;
+        }
+        body{
+            display:flex;
+            flex-direction: column;
+        }
+        footer{
+            flex-shrink: 0;
+        }
+        .container{
+            flex: 1;
+        }
+    </style>
+    {% endblock %}
+
+
+
+    <!--본문 내용-->
+    {% block content %}
+        
+    {% load static %}
+
+    <div class="container">
+        <div class="csCenterTitle">
+            <span class="csCenter">
+            고객센터</span>
+        </div>
+        <hr><br><br>
+
+        
+        <div class="list">      
+          <a href="{% url 'q_and_a' %}">
+            <button class="button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            자주 묻는 질문
+            </button>
+          </a>
+          <!-- <button class="button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            직접 문의하기
+          </button> -->
+              
+        </div>
+    </div>
+    {% endblock %}

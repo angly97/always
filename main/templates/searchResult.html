@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block css%}
+<style>
+
+    .searchResultTitle{
+        margin: 80px 90px 0;
+        color:#726C7B;
+        font-weight: bold;
+        font-size: 3vw;
+    }
+    .searchWord{color:#9f97b1;}
+
+    /* 각 카드 */
+    .card{
+    width:230px; height:300px;
+    margin: 0 20px 50px 0;
+    background-color: #EFECF4;
+    border-radius: 10px 10px 0 0;
+    border-style: none;
+    box-shadow: 2px 4px 12px 0 rgb(0 0 0 / 14%);
+
+    }
+
+    .card-overlay{
+        position: relative;
+        display: flex;
+        justify-content: center;
+        width:230px; height:300px;
+        border-radius: 10px 10px 0 0;
+        z-index: 10;
+        background-color: rgba(162, 149, 172, 0.356);
+        opacity: 0;
+    }
+    .card-overlay:hover{ 
+        opacity: 1;
+        transition: all 0.25s;
+    }
+    .card-overlay span{
+        position: absolute;
+        top: 40%;
+        transform: translateX(-50%);
+        color: rgba(255,255,255,0.9);
+        background-color: rgba(162, 149, 172, 0.575);
+        border: 2px solid white;
+        border-radius: 5px;
+        padding: 4px 8px;
+        font-size: 15px;
+    }
+    /* 카드 속 동물 이미지 */
+    .card-img-top{ 
+        position:absolute;
+        width:100%;
+        height: 70%;
+        object-fit: cover;
+        border-radius: 10px 10px 0 0 ;   
+        box-shadow: 2px 4px 12px 0 rgb(0 0 0 / 14%);
+    }
+    /* 카드 속 설명 */
+    .card-body{
+        position:absolute;
+        top:70%;
+        height: 30%;
+        text-align: center;
+    }
+    .slides .card-body{padding-left: 25px;}
+
+    .card-title{
+        font-weight: bold;
+        color: #9184b1;
+    }
+    .card-text{
+        font-size:15px;
+        font-weight: 800;
+        color:gray;
+    }
+    /* 빈 카드 */
+    .emptyCard{
+        width:230px; height:300px;
+        margin: 0 20px 20px 0;
+        background-color: rgba(0, 0, 0, 0.0);
+    }
+
+    /* 동물들 목록 감싸는 box */
+    .animals{
+        padding: 40px 90px 0px;
+    }
+    /* 목록의 각 동물 */
+    .animals span{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+    .pgn{
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+    .page-link{color: #9184b1; }
+    .page-link:hover{color: #736792;}
+
+
+</style>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+    <div class="searchResultTitle">
+        <span class="searchWord">{{searchWord}}</span>
+        <span>의 검색결과</span>
+        <span style="font-size:1vw;">총 {{animals_num}}건</span>
+    </div>
+
+    <div class="animals">
+        <hr><br><br>
+        <span>
+            {%if searchWord != ''%}
+            {%for animal in animals%}
+            <div class="card">
+                <div class="card-overlay">
+                    <a href="{%url 'mypage' animal.animal_id%}"><span>MORE</span></a>
+                </div>
+                <img src="{{animal.profile_photo.url}}" class="card-img-top" >
+                <div class="card-body">
+                    <span>
+                        <h5 class="card-title">{{animal.name}}</h5>
+                        <p class="card-text">{{animal.birthday|date:"Y.m.d"}} ~ {{animal.memorialday|date:"Y.m.d"}}</p>
+                    </span>
+                </div>
+            </div>
+            {%endfor%}  
+
+            {%for _ in "x"|rjust:empty_num%}
+            <div class="emptyCard"></div>
+            {%endfor%}
+            
+            {%endif%}
+        </span>
+    </div>
+
+
+    <!--부트스트랩 Pagination 컴포넌트 -->
+    <div class="pgn">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            </ul>
+        </nav>
+    </div>
+
+</div>
+
+{% endblock %}
