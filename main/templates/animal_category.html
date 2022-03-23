@@ -3,24 +3,27 @@
     <!-- 이 html에 추가되는 CSS -->
     {% block css %}
     <style>
+        /* 현재 카테고리 설명하는 부분 */
         .currentCategory{
             margin: 30px;
             color:#BEB5D3;
             text-align: center;
         }
 
-        .normalToday{
+        /* 오늘 별이 된 아이들 감싸는 box */
+        .todayStar{
             position: relative;
             margin: 60px 65px;
             padding: 0 75px;
             text-align: center;
         }
-        .normalToday>h3{
+        .todayStar>h3{
             text-align: center;
             margin:50px;
             color:#BEB5D3;
         }
 
+        /* 오늘 별이 된 아이들 슬라이드 구현 */
         .slide_wrapper{
             position: relative;
             height: 320px;
@@ -41,6 +44,7 @@
             float:left;
         }
 
+        /* 슬라이드 넘기기 구현 */
         .controls{
             text-align: center;
         }
@@ -122,7 +126,7 @@
             color: #9184b1;
         }
         .card-text{
-            font-size:15.5px;
+            font-size: 15.5px;
             font-weight: 800;
             color:gray;
         }
@@ -144,7 +148,19 @@
             flex-wrap: wrap;
             justify-content: space-around;
         }
-
+        .registration{position: relative;}
+        .registration span{
+            position: absolute;
+            right: 30px;
+            bottom: -50px;
+            color: #BEB5D3;;
+            padding: 5px;
+        }
+        .registration p{
+            font-weight: bold;
+            font-size: 20px;
+            margin:5px;
+        }
         .pgn{
             display: flex;
             justify-content: center;
@@ -163,19 +179,29 @@
     <div class="container">
 
         <div class="currentCategory">
-            <br>
+            {% if category == 'normal' %}
             <h1>"</h1>
             <h4> 무지개 다리를 건넌 동물들을 추모하는 공간입니다.</h4>
+
+            {% elif category == 'free' %}
+            <h1>"<br>자유로운 영혼</h1><br>
+            <h6> 길고양이, 유기견, 로드킬 등으로 세상을 떠나<br>장례를 치르기 어려운 동물들을 추모할 수 있는 공간입니다.</h6>
+
+            {% elif category == 'honor' %}
+            <h1>"<br>명예관</h1><br>
+            <h6> 경찰견, 치료견, 안내견 등 수고한 동물들을 추모하는 공간입니다.</h6>
+            {% endif %}
         </div>
         <br>
 
+        {%if today_stars%}
         <!--X월 XX일 별이 된 아이들-->
-        <div class="normalToday">
+        <div class="todayStar">
             <h3>{{month}}월 {{day}}일 별이 된 아이들</h3>
             
+            <!--X월 XX일 별이 된 아이들 슬라이드-->
             <div class="slide_wrapper">
                 <ul class="slides">
-                    {%if today_stars%}
                     {%for today_star in today_stars%}
                     <li>
                         <!--bootstrap 카드 컴포넌트-->
@@ -197,8 +223,7 @@
                             </div>
                         </div>
                     </li>
-                    {%endfor%}
-                    {%endif%}  
+                    {%endfor%}   
                 </ul>
             </div>
 
@@ -207,21 +232,22 @@
                 <span class="prev">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z"/>
-                    </svg>
+                        </svg>
                 </span>
                 <span class="next">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
-                    </svg>
+                        </svg>
                 </span>
             </p>
         </div>
 
         <hr>
+        {%endif%}
 
         <div class="animals">
             <span>
-                {%for normal_animal in normal_animals%}
+                {%for animal in animals%}
                 <div class="card">
                     <div class="card-overlay">
                         {% if not user.is_authenticated %}
@@ -231,12 +257,12 @@
                         <a href="" onclick="pwin()"><span>MORE</span></a>
                         {% endif %}
                     </div>
-                    <img src="{{normal_animal.profile_photo.url}}" class="card-img-top" >
+                    <img src="{{animal.profile_photo.url}}" class="card-img-top" >
                     <div class="card-body">
                         <span>
                             
-                            <h5 class="card-title">{{normal_animal.name}}</h5>
-                            <p class="card-text">{{normal_animal.birthday|date:"Y.m.d"}} ~ {{normal_animal.memorialday|date:"Y.m.d"}}</p>
+                            <h5 class="card-title">{{animal.name}}</h5>
+                            <p class="card-text">{{animal.birthday|date:"Y.m.d"}} ~ {{animal.memorialday|date:"Y.m.d"}}</p>
                         </span>
                     </div>
                 </div>
@@ -245,9 +271,31 @@
                 <div class="emptyCard"></div>
                 {%endfor%}
             </span>
+
+            <div class="registration">
+                {% if user.is_authenticated %} <!--등록된 유저가 맞다면-->
+                <a href="{% url 'registration' 'free' %}">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+                            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
+                        </svg>
+                        <p>등록하기</p>
+                    </span>
+                </a>
+                {% endif %}
+                {% if not user.is_authenticated %}
+                <a href="{% url 'login' %}">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+                            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
+                        </svg>
+                        <p>등록하기</p>
+                    </span>
+                </a>
+                {% endif %}
+            </div>
+
         </div>
-
-
 
 
         <!--부트스트랩 Pagination 컴포넌트 -->
@@ -255,16 +303,16 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                 <!--이전 글이 있으면 -->
-                {% if normal_animals.has_previous %}
+                {% if animals.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{normal_animals.previous_page_number}}" aria-label="Previous">
+                    <a class="page-link" href="?page={{animals.previous_page_number}}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
                 {% endif %}
 
-                {% for p in "x"|rjust:normal_animals.paginator.num_pages %}
-                    {% if forloop.counter == normal_animals.number %}
+                {% for p in "x"|rjust:animals.paginator.num_pages %}
+                    {% if forloop.counter == animals.number %}
                     <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}" style="font-size: larger;">{{forloop.counter }}</a></li>
                     
                     {% else %}
@@ -273,9 +321,9 @@
                 {% endfor %}
 
                 <!--다음 글이 있으면-->
-                {% if normal_animals.has_next %}
+                {% if animals.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{normal_animals.next_page_number}}" aria-label="Next">
+                    <a class="page-link" href="?page={{animals.next_page_number}}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
@@ -284,7 +332,8 @@
             </nav>
         </div>
     </div>
-
+    
+    <!--X월 XX일 별이 된 아이들 카드 슬라이드 효과-->
     <script> 
         var slides=document.querySelector('.slides'),
             slide=document.querySelectorAll('.slides li'),
@@ -294,10 +343,12 @@
             slideWidth=230,
             slideMargin=20,
             nextBtn=document.querySelector('.next'),
-            today_stars_num = parseInt("{{today_stars_num}}");
+            today_stars_num = parseInt("{{today_stars_num}}");      // view.py의 free함수에서 받은 오늘 별이 된 아이들 갯수 변수
 
+            // 슬라이드 너비를 위의 변수 크기에 따라 설정
             document.querySelector('.slides').style.width = today_stars_num*(slideWidth + slideMargin)+'px'; 
            
+            // 슬라이드 랩퍼 크기를 위으 변수 크기에 따라 설정
             if(today_stars_num > 4){today_stars_num = 4;}
             document.querySelector('.slide_wrapper').style.width = today_stars_num*(slideWidth + slideMargin)+'px';
             

@@ -106,7 +106,7 @@
             <br>
 
             <div class="registerLetter">
-                <form action="{% url 'freeRegistered' %}" method="post" enctype="multipart/form-data">
+                <form action="{% url 'registered' category %}" method="post" enctype="multipart/form-data">
                     <!--Csrf 공격을 막기 위해 반드시 처음에 사용-->
                     {%csrf_token%}
 

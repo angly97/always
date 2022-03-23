@@ -283,9 +283,9 @@
             <!--메뉴 아이콘 클릭 시 나옴-->
             <div class="menuBar">
                 <div class="menuItem"><a href="{% url 'home' %}">Home</a></div>
-                <div class="menuItem"><a href="{% url 'normal' %}">일반관</a></div>
-                <div class="menuItem"><a href="{% url 'honor' %}">명예관</a></div>
-                <div class="menuItem"><a href="{% url 'free' %}">자유로운 영혼</a></div>
+                <div class="menuItem"><a href="{% url 'animal_category' 'normal' %}">일반관</a></div>
+                <div class="menuItem"><a href="{% url 'animal_category' 'honor' %}">명예관</a></div>
+                <div class="menuItem"><a href="{% url 'animal_category' 'free' %}">자유로운 영혼</a></div>
                 <div class="menuItem"><a href="{% url 'searchMap' %}">반려동물 장례 장소 검색</a></div>
                 <div class="menuItem"><a href="{% url 'q_and_a' %}">고객센터</a></div>
                 <div class="menuItem"><a href="{% url 'aboutUs' %}">About Us</a></div>

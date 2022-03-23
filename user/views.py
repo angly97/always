@@ -42,10 +42,10 @@ def signUp(request):
          form: UserCreationForm
          return render(request, "signUp.html")
 
-def idFind(request):
-    return render(request, "idFind.html")    
+# def idFind(request):
+#     return render(request, "idFind.html")    
 
 
-def pwFind(request):
-    return render(request, "pwFind.html")   
+# def pwFind(request):
+#     return render(request, "pwFind.html")   
     

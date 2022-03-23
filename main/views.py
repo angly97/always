@@ -29,74 +29,38 @@ def home(request):
     'free_animals_num':len(free_animals), 'honor_animals_num':len(honor_animals) })
 
 
-def honor(request):
-    # 오늘 월, 일 계산
+def animal_category(request, category):
     today = DateFormat(datetime.now()).format('md')
     month=today[1] if today[0]=='0' else today[:2]
     month = month.rjust(2, '0')
     day=today[2:]
 
-    # 카테고리가 honor인 동물들만 가져와 honor_animals에 저장
-    honor_animals = Animal.objects.filter(
-        category = "honor"
-    )
+    animals = Animal.objects.filter(category = category)
 
-    # 오늘 월/일에 죽은 동물들만 가져와 today_starts에 저장
     today_stars = Animal.objects.filter(
-        category = "honor",
+        category = category,
         memorialday__month = month,
         memorialday__day = day
     )
-   
-    # 한 페이지 당 16마리 동물 보이도록 페이지네이션
-    paginator = Paginator(honor_animals, 16)
-    page = request.GET.get('page')          # 몇번째 페이지인지 받아옴
 
-    honor_animals = paginator.get_page(page)
+    paginator = Paginator(animals, 16)
+    page = request.GET.get('page')
+    animals = paginator.get_page(page)
 
-    return render(request, "honor.html",{"month":month, "day":day, 'honor_animals': honor_animals,'empty_num':4-len(honor_animals)%4,
-     'today_stars': today_stars, 'today_stars_num': len(today_stars)})
+    return render(request, 'animal_category.html', {'animals':animals, 'category': category,'empty_num':4-len(animals)%4,
+    "month":month, 'day': day, 'today_stars':today_stars, 'today_stars_num': len(today_stars) })
+    
 
-
-def free(request):
-    # 오늘 월, 일 계산
-    today = DateFormat(datetime.now()).format('md')
-    month=today[1] if today[0]=='0' else today[:2]
-    month = month.rjust(2, '0')
-    day=today[2:]
-
-    # 카테고리가 free인 동물들만 가져와 free_animals에 저장
-    free_animals = Animal.objects.filter(
-        category = "free"
-    )
-
-    # 오늘 월/일에 죽은 동물들만 가져와 today_starts에 저장
-    today_stars = Animal.objects.filter(
-        category = "free",
-        memorialday__month = month,
-        memorialday__day = day
-    )
-   
-    # 한 페이지 당 16마리 동물 보이도록 페이지네이션
-    paginator = Paginator(free_animals, 16)
-    page = request.GET.get('page')          # 몇번째 페이지인지 받아옴
-
-    free_animals = paginator.get_page(page)
-
-    return render(request, "free.html",{"month":month, "day":day, 'free_animals': free_animals,'empty_num':4-len(free_animals)%4,
-     'today_stars': today_stars, 'today_stars_num': len(today_stars) })
+def registration(request, category):
+    return render(request, "registration.html", {'category': category})
 
 
-def freeRegistration(request):
-    return render(request, "freeRegistration.html")
-
-
-def freeRegistered(request):
+def registered(request, category):
     newAnimal = Animal()
 
     temp_id = Animal.objects.count()
     newAnimal.animal_id = temp_id +1 if temp_id != 0 else 1
-    newAnimal.category = 'free'
+    newAnimal.category = category
     newAnimal.name = request.POST['animalName']
     newAnimal.species = request.POST['animalType']
     newAnimal.subspecies = request.POST['animalSubType']
@@ -107,11 +71,8 @@ def freeRegistered(request):
     newAnimal.pub_date = datetime.now()
     newAnimal.save()
     
-    return redirect('free')
+    return redirect(category)
 
-
-def aboutUs(request):
-    return render(request, "aboutUs.html")
 
 def searchMap(request):
     return render(request, "searchMap.html")
@@ -133,36 +94,11 @@ def searchResult(request):
     return render(request, "searchResult.html",{"searchWord":searchWord, "animals":animals
     , "animals_num": len(animals), "empty_num":4-len(animals)%4 })
 
-
-def normal(request):
-    
-    today = DateFormat(datetime.now()).format('md')
-    month=today[1] if today[0]=='0' else today[:2]
-    month = month.rjust(2, '0')
-    day=today[2:]
-
-    normal_animals = Animal.objects.filter(category = "normal")
-
-    today_stars = Animal.objects.filter(
-        category = "normal",
-        memorialday__month = month,
-        memorialday__day = day
-    )
-
-    paginator = Paginator(normal_animals, 16)
-    page = request.GET.get('page')
-    normal_animals = paginator.get_page(page)
-
-    return render(request, "normal.html",{'normal_animals':normal_animals,'empty_num':4-len(normal_animals)%4,
-    "month":month, 'day': day, 'today_stars':today_stars, 'today_stars_num': len(today_stars) })
-    
-
 def csCenter(request):
     return render(request, "csCenter.html")    
-
 
 def q_and_a(request):
     return render(request, "q_and_a.html")    
 
-def idFind(request):
-    return render(request, "idFind.html")    
+def aboutUs(request):
+    return render(request, "aboutUs.html")
