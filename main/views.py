@@ -69,10 +69,27 @@ def registered(request, category):
     newAnimal.profile_photo = request.FILES.get('animalImg', None)
     newAnimal.introduce = request.POST['animalInfo']
     newAnimal.pub_date = datetime.now()
+    newAnimal.owner_id = request.user
     newAnimal.save()
     
     return redirect('../animal_category/'+category)  
 
+def letterBox(request, username):
+    return (request, 'letterBox.html')
+    # animals = Animal.objects.filter(category = category)
+
+    # today_stars = Animal.objects.filter(
+    #     category = category,
+    #     memorialday__month = month,
+    #     memorialday__day = day
+    # )
+
+    # paginator = Paginator(animals, 16)
+    # page = request.GET.get('page')
+    # animals = paginator.get_page(page)
+
+    # return render(request, 'letterBox.html', {'animals':animals, 'category': category,'empty_num':4-len(animals)%4,
+    # "month":month, 'day': day, 'today_stars':today_stars, 'today_stars_num': len(today_stars) })
 
 def searchMap(request):
     return render(request, "searchMap.html")

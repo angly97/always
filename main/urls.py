@@ -11,6 +11,8 @@ urlpatterns = [
     path('registration/<str:category>', registration, name="registration"),
     path('registered/<str:category>', registered, name="registered"),
 
+    path('letterBox/<str:username>', letterBox, name='letterBox'),
+
     path('aboutUs/',aboutUs, name="aboutUs"),
     path('searchMap/',searchMap,name="searchMap"),
     path('searchResult/',searchResult, name='searchResult'),
