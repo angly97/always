@@ -71,7 +71,7 @@ def registered(request, category):
     newAnimal.pub_date = datetime.now()
     newAnimal.save()
     
-    return redirect(category)
+    return redirect('../animal_category/'+category)  
 
 
 def searchMap(request):
