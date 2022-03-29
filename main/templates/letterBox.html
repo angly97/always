@@ -180,7 +180,7 @@
 
         <div class="currentCategory">
             <h1>"<br>나의 편지함</h1><br>
-            <!-- <h6> 지금까지 user.nickname님이 하늘나라의 아이들에게 보낸<br>장례를 치르기 어려운 동물들을 추모할 수 있는 공간입니다.</h6> -->
+            <h6>{{user.user_nickname}}님이 하늘나라의 아이들에게 보낸<br>편지들을 보관한 공간입니다.</h6>
         </div>
         <br>
 
@@ -189,7 +189,7 @@
                 {%for animal in animals%}
                 <div class="card">
                     <div class="card-overlay">
-                        <a href="" onclick="pwin()"><span>MORE</span></a>
+                        <a href="{% url 'animalPage' animal.animal_id %}" onclick="window.open(this.href,'_blank','width=600, height=400'); return false"><span>MORE</span></a>
                     </div>
                     <img src="{{animal.profile_photo.url}}" class="card-img-top" >
                     <div class="card-body">
@@ -205,19 +205,6 @@
                 <div class="emptyCard"></div>
                 {%endfor%}
             </span>
-
-            <div class="registration">
-                {% if user.is_authenticated %} <!--등록된 유저가 맞다면-->
-                <a href="{% url 'registration' category %}">
-                    <span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
-                            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
-                        </svg>
-                        <p>등록하기</p>
-                    </span>
-                </a>
-                {% endif %}
-            </div>
 
         </div>
 

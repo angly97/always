@@ -14,6 +14,12 @@ class Animal(models.Model):
     introduce = models.TextField(null=True)                                         # 소개글
     pub_date = models.DateTimeField(null=True)                                      # 등록시간
 
+class Message(models.Model):
+    message_id = models.IntegerField(primary_key=True)  
+    animal = models.ForeignKey(Animal, on_delete=models.CASCADE)         # 동물
+    writer = models.ForeignKey(User, on_delete=models.CASCADE)           # 작성자
+    content=models.CharField(max_length=500)                             # 내용
+    pub_date=models.DateField                                            # 작성날짜
 
 class csCenter(models.Model):
     cs_id = models.IntegerField(primary_key=True)  

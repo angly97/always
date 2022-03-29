@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang = "kr">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+         <!--부트스트랩 CSS/JS-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="{% static 'app_name/css/document.css' %}">
+
+
+        <style>
+
+            @font-face {
+            font-family: 'GmarketSansLight';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+            }
+
+            body{
+                max-width: 850px;
+                max-height: 660px;
+                background-color: #726C7B;
+            }
+
+            .profile-img{
+                position:absoulte;
+                width:110%;
+                height:50%;
+                object-fit: cover;
+                border-radius: 50px;
+                
+            }
+
+            .mypageShape{
+                margin-left:10px;
+                margin-top: 10px;
+                width: 820px;
+                height:575px;
+                background-image:url("{% static 'MypageBackground.png' %}");
+                background-size: 100%;
+                display :flex;
+                flex-direction:row;
+            }
+
+            .left {
+                width: 180px;
+                height: 445px;
+                padding : 20px;
+                margin : 30px;
+                color:#726C7B;
+            }
+            .right {
+                width: 450px;
+                height: 445px;
+                margin : 60px 0px 0px 50px;
+                /* background-color: blue; */
+                color:#726C7B;
+            }
+            
+            .rightlist{ margin: 20px 20px 0 20px;}
+            .rightlist .message{ 
+                width: 100%; 
+                height: 100px;
+                background-color: aquamarine;
+            }
+            .message{margin: 30px 0;}
+            .message textarea{
+                width: 100%;
+                height: 90%;
+                resize: none;
+            }
+            .message div{
+                display :flex;
+                justify-content:space-between;
+            }
+            .message div button{
+                border: 3px solid #BEB5D3;
+                border-radius: 6px;
+                color: rgb(156, 145, 173);
+                font-weight: bold;
+                background-color: rgba(0,0,0,0);
+            }
+            .submitBtn button:hover{
+                background-color: #BEB5D3;
+                color: white;
+            }
+
+        </style>
+
+    </head>
+    <body onresize="parent.resizeTo(870,660)" onload="parent.resizeTo(870,660)" link="#726C7B", vlink="#726C7B", alink="#726C7B">
+        {% csrf_token %}
+        <!-- 기본 모양 --> 
+        <div class="mypageShape">
+
+            <!-- 왼쪽 프레임 관리 -->
+            <div class="left"> 
+                <br>
+                <img src = "{{animal.profile_photo.url}}" class="profile-img">
+                <br>
+                <h3>{{animal.name}}</h3>
+                <strong>{{animal.birthday|date:"Y.m.d"}}~{{animal.memorialday|date:"Y.m.d"}}</strong>
+                <br>
+                <br>
+                <strong>{{animal.introduce}}</strong>
+            </div>
+
+            <!-- 오른쪽 프레임 관리 -->
+            <div class="right">
+                {%csrf_token%}
+                <div class="rightlist">
+                    <h3>{{animal.name}}에게 온 메시지</h3>
+
+                    <form action="{% url 'send' animal.animal_id %}" method="post" enctype="multipart/form-data">
+                        {%csrf_token%}
+                        <div class="message">
+                            <textarea id="content", name="content"></textarea>
+                            <div>
+                                <span>최대 500자 이내까지 작성 가능합니다.</span>
+                                <span><button type="submit">전송</button></span>
+                            </div>
+                        </div>
+                        <div class="message">
+                            {%for message in messages%}
+                            {%endfor%}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

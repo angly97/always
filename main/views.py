@@ -74,22 +74,47 @@ def registered(request, category):
     
     return redirect('../animal_category/'+category)  
 
-def letterBox(request, username):
-    return (request, 'letterBox.html')
-    # animals = Animal.objects.filter(category = category)
+def letterBox(request):
+    animals = Animal.objects.filter(owner_id = request.user.id)
 
-    # today_stars = Animal.objects.filter(
-    #     category = category,
-    #     memorialday__month = month,
-    #     memorialday__day = day
-    # )
+    nomal_animals = [animal for animal in animals if animal.category == 'nomal']
+    free_animals = [animal for animal in animals if animal.category == 'free']
+    honor_animals = [animal for animal in animals if animal.category == 'honor']
 
-    # paginator = Paginator(animals, 16)
-    # page = request.GET.get('page')
-    # animals = paginator.get_page(page)
+    page = request.GET.get('page')
+    paginator = Paginator(animals, 16)
+    animals = paginator.get_page(page)
+    
+    normal_paginator = Paginator(nomal_animals, 16)
+    nomal_animals = normal_paginator.get_page(page)
+    
+    free_paginator = Paginator(free_animals, 16)
+    free_animals = free_paginator.get_page(page)
 
-    # return render(request, 'letterBox.html', {'animals':animals, 'category': category,'empty_num':4-len(animals)%4,
-    # "month":month, 'day': day, 'today_stars':today_stars, 'today_stars_num': len(today_stars) })
+    honor_paginator = Paginator(honor_animals, 16)
+    honor_animals = honor_paginator.get_page(page)
+
+    return render(request, 'letterBox.html', {'animals':animals, 'nomal_animals':nomal_animals, 'free_animals': free_animals, 'honor_animals':honor_animals ,
+    'empty_num':4-len(animals)%4, 'normal_empty_num':4-len(nomal_animals)%4 , 'free_empty_num':4-len(free_animals)%4, 'honor_empty_num':4-len(honor_animals)%4 })
+
+def animalPage(request, animal_id):
+    animal = get_object_or_404(Animal, animal_id=animal_id)
+    messages = Message.objects.filter(animal_id = animal_id).all()
+    return render(request, "animal_page.html",{'animal':animal, 'messages': messages})
+
+def send(request, animal_id):
+    newMessage = Message()
+
+    temp_id = Message.objects.count()
+    newMessage.message_id = temp_id +1 if temp_id != 0 else 1
+    newMessage.writer = request.user
+    newMessage.animal = Animal.objects.filter(animal_id = animal_id).get()
+    newMessage.content = request.POST['content']
+    newMessage.pub_date = datetime.now()
+    newMessage.save()
+    
+    return redirect('../animal_page/'+str(animal_id))
+
 
 def searchMap(request):
     return render(request, "searchMap.html")

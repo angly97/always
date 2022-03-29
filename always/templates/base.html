@@ -300,7 +300,7 @@
                 {% endif %}
 
                 {% if user.is_authenticated %} <!--등록된 유저가 맞다면-->
-                <span class="headerBtn"><a href="{% url 'letterBox' user.username %}">나의 편지함</a></span>
+                <span class="headerBtn"><a href="{% url 'letterBox' %}">나의 편지함</a></span>
                 <span class="loginBtn"><a href="{% url 'logout' %}">로그아웃</a></span>
                 {% endif %}
             </span>
