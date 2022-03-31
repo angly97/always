@@ -19,7 +19,7 @@ class Message(models.Model):
     animal = models.ForeignKey(Animal, on_delete=models.CASCADE)         # 동물
     writer = models.ForeignKey(User, on_delete=models.CASCADE)           # 작성자
     content=models.CharField(max_length=500)                             # 내용
-    pub_date=models.DateField                                            # 작성날짜
+    pub_date=models.DateField()                                           # 작성날짜
 
 class csCenter(models.Model):
     cs_id = models.IntegerField(primary_key=True)  

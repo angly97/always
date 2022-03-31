@@ -29,7 +29,9 @@
                 max-width: 850px;
                 max-height: 660px;
                 background-color: #726C7B;
+                -ms-overflow-style: none;
             }
+            ::-webkit-scrollbar { display: none; }
 
             .profile-img{
                 position:absoulte;
@@ -58,31 +60,36 @@
                 margin : 30px;
                 color:#726C7B;
             }
+            .animal_intro{
+                height: 150px;
+                overflow-y: scroll;
+                -ms-overflow-style: none;
+            }
+            .animal_intro::-webkit-scrollbar{ display:none; }
+
             .right {
                 width: 450px;
                 height: 445px;
                 margin : 60px 0px 0px 50px;
-                /* background-color: blue; */
                 color:#726C7B;
             }
             
             .rightlist{ margin: 20px 20px 0 20px;}
-            .rightlist .message{ 
+            .rightlist .send{ 
                 width: 100%; 
                 height: 100px;
-                background-color: aquamarine;
             }
-            .message{margin: 30px 0;}
-            .message textarea{
+            .send{margin: 30px 0;}
+            .send textarea{
                 width: 100%;
                 height: 90%;
                 resize: none;
             }
-            .message div{
+            .send div{
                 display :flex;
                 justify-content:space-between;
             }
-            .message div button{
+            .send div button{
                 border: 3px solid #BEB5D3;
                 border-radius: 6px;
                 color: rgb(156, 145, 173);
@@ -93,7 +100,50 @@
                 background-color: #BEB5D3;
                 color: white;
             }
-
+            .deleteMessage{
+                padding: 3px 5px;
+                border: 3px solid #BEB5D3;
+                border-radius: 6px;
+                font-weight: bold;
+                background-color: rgba(0,0,0,0);
+            }
+            .deleteMessage:hover{
+                background-color: #BEB5D3;
+            }
+            .deleteMessage a{
+                color: rgb(156, 145, 173);}
+            .deleteMessage a:hover{
+                text-decoration: none;
+                color: white;
+            }
+            .messages{
+                margin: 60px 0; 
+                height: 200px;
+                overflow-y: scroll;
+                -ms-overflow-style: none;
+            }
+            .messages::-webkit-scrollbar{ display:none; }
+            .message{ 
+                padding: 10px 0;
+            }
+            .writer{
+                display :flex;
+                justify-content:space-between;
+            }
+            .content{
+                padding: 10px 0;
+                border-bottom: 3px dotted #726C7B;
+            }
+            .showtag{
+                margin: 50px 0;
+                transform: translateX(50%);
+                text-align: center;
+                line-height: 40px;
+                width :80px;
+                height : 40px;
+                background-image:url("{% static 'nametag.png' %}");
+                background-size: 100%;
+            }
         </style>
 
     </head>
@@ -107,11 +157,11 @@
                 <br>
                 <img src = "{{animal.profile_photo.url}}" class="profile-img">
                 <br>
-                <h3>{{animal.name}}</h3>
+                <h3 style="text-align: center;">{{animal.name}}</h3>
                 <strong>{{animal.birthday|date:"Y.m.d"}}~{{animal.memorialday|date:"Y.m.d"}}</strong>
                 <br>
                 <br>
-                <strong>{{animal.introduce}}</strong>
+                <div class = 'animal_intro'><strong>{{animal.introduce}}</strong></div>
             </div>
 
             <!-- 오른쪽 프레임 관리 -->
@@ -122,15 +172,32 @@
 
                     <form action="{% url 'send' animal.animal_id %}" method="post" enctype="multipart/form-data">
                         {%csrf_token%}
-                        <div class="message">
+                        <div class="send">
                             <textarea id="content", name="content"></textarea>
                             <div>
                                 <span>최대 500자 이내까지 작성 가능합니다.</span>
                                 <span><button type="submit">전송</button></span>
                             </div>
                         </div>
-                        <div class="message">
+                        <div class="messages">
+                            <!-- message log -->
                             {%for message in messages%}
+                            <div class ='message'>
+                                <div class ="writer">
+                                    <div style="font-weight: 800;">{{message.writer.user_nickname}}</div>
+                                    <div>
+                                        <span>{{message.pub_date|date:"Y.m.d"}}</span>
+                                        {%if user.username == message.writer.username%}
+                                        <span class="deleteMessage">
+                                            <a href="{% url 'deleteMessage' message.animal.animal_id message.message_id %}">
+                                            삭제
+                                            </a>
+                                        </span>
+                                        {%endif%}
+                                    </div>
+                                </div>
+                                <div class = "content">{{message.content}}</div>
+                            </div>
                             {%endfor%}
                         </div>
                     </form>

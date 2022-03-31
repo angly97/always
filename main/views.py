@@ -102,19 +102,28 @@ def animalPage(request, animal_id):
     messages = Message.objects.filter(animal_id = animal_id).all()
     return render(request, "animal_page.html",{'animal':animal, 'messages': messages})
 
+def deleteAnimal(request, animal_id):
+    animal = get_object_or_404(Animal, pk = animal_id)
+    animal.delete()
+    return redirect('letterBox')
+
 def send(request, animal_id):
     newMessage = Message()
 
     temp_id = Message.objects.count()
     newMessage.message_id = temp_id +1 if temp_id != 0 else 1
     newMessage.writer = request.user
-    newMessage.animal = Animal.objects.filter(animal_id = animal_id).get()
+    newMessage.animal = Animal.objects.get(animal_id = animal_id)
     newMessage.content = request.POST['content']
     newMessage.pub_date = datetime.now()
     newMessage.save()
     
     return redirect('../animal_page/'+str(animal_id))
 
+def deleteMessage(request, animal_id, message_id):
+    message = get_object_or_404(Message, pk = message_id)
+    message.delete()
+    return redirect('../../animal_page/'+str(animal_id))
 
 def searchMap(request):
     return render(request, "searchMap.html")

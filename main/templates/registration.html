@@ -100,9 +100,19 @@
 
         <div class="container">
             <div class="currentCategory">
-                <h1>"<br>자유로운 영혼</h1><br>
-                <h6> 길고양이, 유기견, 로드킬 등으로 세상을 떠나<br>장례를 치르기 어려운 동물들을 추모할 수 있는 공간입니다.</h6>
-            </div>
+              {% if category == 'normal' %}
+              <h1>행복했어</h1>
+              <h4> 무지개 다리를 건넌 동물들을 추모하는 공간입니다.</h4>
+  
+              {% elif category == 'free' %}
+              <h1>"<br>고생했어</h1><br>
+              <h6> 길고양이, 유기견, 로드킬 등으로 세상을 떠나<br>장례를 치르기 어려운 동물들을 추모할 수 있는 공간입니다.</h6>
+  
+              {% elif category == 'honor' %}
+              <h1>"<br>수고했어</h1><br>
+              <h6> 마약탐지견, 경찰견, 시각장애인안내견 등 수고한 동물들을 추모하는 공간입니다.</h6>
+              {% endif %}
+              </div>
             <br>
 
             <div class="registerLetter">

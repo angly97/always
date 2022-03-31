@@ -13,7 +13,9 @@ urlpatterns = [
 
     path('letterBox', letterBox, name='letterBox'),
     path('animal_page/<int:animal_id>', animalPage, name='animalPage'),
+    path('deleteAnimal/<int:animal_id>', deleteAnimal, name='deleteAnimal'),
     path('send/<int:animal_id>', send, name='send'),
+    path('deleteMessage/<int:animal_id>/<int:message_id>', deleteMessage, name='deleteMessage'),
 
     path('aboutUs/',aboutUs, name="aboutUs"),
     path('searchMap/',searchMap,name="searchMap"),

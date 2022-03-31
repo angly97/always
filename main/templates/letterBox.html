@@ -68,9 +68,16 @@
         .controls span.next{left:calc(100%);transform: translateX(-180%);}
         
         /* 각 카드 */
+        .card-box{
+            width:230px; height:350px;
+            margin: 0 10px 50px 10px;
+            display :flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
         .card{
             width:230px; height:300px;
-            margin: 0 10px 50px 10px;
             background-color: #EFECF4;
             border-radius: 10px 10px 0 0;
             border-style: none;
@@ -169,6 +176,26 @@
         .page-link{color: #9184b1 !important; }
         .page-link:hover{color: #736792;}
 
+        .deleteAnimal{
+            width: 70px;
+            text-align: center;
+            padding: 3px 5px;
+            border: 3px solid #BEB5D3;
+            border-radius: 6px;
+            font-weight: bold;
+            background-color: rgba(0,0,0,0);
+        }
+        .deleteAnimal:hover{
+            background-color: #BEB5D3;
+            color: white;
+        }
+        .deleteAnimal a{
+            color: rgb(156, 145, 173);
+        }
+        .deleteAnimal a:hover{
+            color: rgb(255, 255, 255);
+        }
+
     </style>
     {% endblock %}
 
@@ -187,20 +214,31 @@
         <div class="animals">
             <span>
                 {%for animal in animals%}
-                <div class="card">
-                    <div class="card-overlay">
-                        <a href="{% url 'animalPage' animal.animal_id %}" onclick="window.open(this.href,'_blank','width=600, height=400'); return false"><span>MORE</span></a>
-                    </div>
-                    <img src="{{animal.profile_photo.url}}" class="card-img-top" >
-                    <div class="card-body">
-                        <span>
-                            
-                            <h5 class="card-title">{{animal.name}}</h5>
-                            <p class="card-text">{{animal.birthday|date:"Y.m.d"}} ~ {{animal.memorialday|date:"Y.m.d"}}</p>
-                        </span>
-                    </div>
+                <div class="card-box">
+                    <div class="card">
+                        <div class="card-overlay">
+                            <a href="{% url 'animalPage' animal.animal_id %}" onclick="window.open(this.href,'_blank','width=600, height=400'); return false"><span>MORE</span></a>
+                        </div>
+                        <img src="{{animal.profile_photo.url}}" class="card-img-top" >
+                        <div class="card-body">
+                            <span>
+                                
+                                <h5 class="card-title">{{animal.name}}</h5>
+                                <p class="card-text">{{animal.birthday|date:"Y.m.d"}} ~ {{animal.memorialday|date:"Y.m.d"}}</p>
+                            </span>
+                        </div>
+                    </div> 
+                    {%if user.username == animal.owner_id.username %}
+                    <span class="deleteAnimal">
+                        <a href="{% url 'deleteAnimal' animal.animal_id %}">
+                            <strong>삭제</strong>
+                        </a>
+                    </span>
+                    {%endif%}                   
                 </div>
+
                 {%endfor%}
+
                 {%for _ in "x"|rjust:empty_num%}
                 <div class="emptyCard"></div>
                 {%endfor%}
