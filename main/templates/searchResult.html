@@ -121,7 +121,7 @@
             {%for animal in animals%}
             <div class="card">
                 <div class="card-overlay">
-                    <a href="{%url 'mypage' animal.animal_id%}"><span>MORE</span></a>
+                    <a href="{% url 'animalPage' animal.animal_id %}" onclick="window.open(this.href,'_blank','width=600, height=400'); return false"><span>MORE</span></a>
                 </div>
                 <img src="{{animal.profile_photo.url}}" class="card-img-top" >
                 <div class="card-body">

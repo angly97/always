@@ -129,9 +129,10 @@ def searchMap(request):
     return render(request, "searchMap.html")
 
 def searchResult(request):
-    searchWord=request.POST['searchInput']
+    originWord=request.POST['searchInput']
     
-    if searchWord == "개": searchWord = "강아지"
+    if originWord in ["개", "강아지", "강쥐", "댕댕이"]: searchWord = "강아지"
+    else:   searchWord = originWord
 
     animals = Animal.objects.filter(
         Q(name__contains = searchWord)|
@@ -142,7 +143,7 @@ def searchResult(request):
         Q(memorialday__contains = searchWord)|
         Q(introduce__contains = searchWord)
     )
-    return render(request, "searchResult.html",{"searchWord":searchWord, "animals":animals
+    return render(request, "searchResult.html",{"searchWord":originWord, "animals":animals
     , "animals_num": len(animals), "empty_num":4-len(animals)%4 })
 
 def csCenter(request):
