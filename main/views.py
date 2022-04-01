@@ -11,7 +11,7 @@ def home(request):
     # 오늘 월, 일 계산
     today = DateFormat(datetime.now()).format('md')
     month=today[1] if today[0]=='0' else today[:2]
-    day='02'
+    day=today[2:]
     today_stars = Animal.objects.filter(
         memorialday__month = month,
         memorialday__day = day
@@ -33,7 +33,7 @@ def animal_category(request, category):
     today = DateFormat(datetime.now()).format('md')
     month=today[1] if today[0]=='0' else today[:2]
     month = month.rjust(2, '0')
-    day='02'
+    day=today[2:]
 
     animals = Animal.objects.filter(category = category).order_by('-pub_date')
 
