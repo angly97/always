@@ -238,10 +238,12 @@
                 </div>
 
                 {%endfor%}
-
+                
+                {%if empty_num > 0%}
                 {%for _ in "x"|rjust:empty_num%}
                 <div class="emptyCard"></div>
                 {%endfor%}
+                {%endif%}
             </span>
 
         </div>

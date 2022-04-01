@@ -11,18 +11,18 @@ def home(request):
     # 오늘 월, 일 계산
     today = DateFormat(datetime.now()).format('md')
     month=today[1] if today[0]=='0' else today[:2]
-    day=today[2:]
-    
+    day='02'
     today_stars = Animal.objects.filter(
         memorialday__month = month,
         memorialday__day = day
-    )
+    ).order_by('-pub_date')
+
     free_animals = Animal.objects.filter(
         category = "free"
-    )
+    ).order_by('-pub_date')
     honor_animals = Animal.objects.filter(
         category = "honor"
-    )
+    ).order_by('-pub_date')
 
     return render(request, "home.html",{"month":month, "day":day, 'today_stars': today_stars,
     'free_animals': free_animals, 'honor_animals': honor_animals, 'today_stars_num': len(today_stars),
@@ -33,21 +33,23 @@ def animal_category(request, category):
     today = DateFormat(datetime.now()).format('md')
     month=today[1] if today[0]=='0' else today[:2]
     month = month.rjust(2, '0')
-    day=today[2:]
+    day='02'
 
-    animals = Animal.objects.filter(category = category)
+    animals = Animal.objects.filter(category = category).order_by('-pub_date')
 
     today_stars = Animal.objects.filter(
         category = category,
         memorialday__month = month,
         memorialday__day = day
-    )
+    ).order_by('-pub_date')
 
     paginator = Paginator(animals, 16)
     page = request.GET.get('page')
     animals = paginator.get_page(page)
 
-    return render(request, 'animal_category.html', {'animals':animals, 'category': category,'empty_num':4-len(animals)%4,
+    empty_num = 4-len(animals)%4 if len(animals)%4 else 0
+
+    return render(request, 'animal_category.html', {'animals':animals, 'category': category,'empty_num':empty_num,
     "month":month, 'day': day, 'today_stars':today_stars, 'today_stars_num': len(today_stars) })
     
 
@@ -75,7 +77,7 @@ def registered(request, category):
     return redirect('../animal_category/'+category)  
 
 def letterBox(request):
-    animals = Animal.objects.filter(owner_id = request.user.id)
+    animals = Animal.objects.filter(owner_id = request.user.id).order_by('-pub_date')
 
     nomal_animals = [animal for animal in animals if animal.category == 'nomal']
     free_animals = [animal for animal in animals if animal.category == 'free']
@@ -94,8 +96,10 @@ def letterBox(request):
     honor_paginator = Paginator(honor_animals, 16)
     honor_animals = honor_paginator.get_page(page)
 
+    empty_num = 4-len(animals)%4 if len(animals)%4 else 0
+
     return render(request, 'letterBox.html', {'animals':animals, 'nomal_animals':nomal_animals, 'free_animals': free_animals, 'honor_animals':honor_animals ,
-    'empty_num':4-len(animals)%4, 'normal_empty_num':4-len(nomal_animals)%4 , 'free_empty_num':4-len(free_animals)%4, 'honor_empty_num':4-len(honor_animals)%4 })
+    'empty_num':empty_num, 'normal_empty_num':4-len(nomal_animals)%4 , 'free_empty_num':4-len(free_animals)%4, 'honor_empty_num':4-len(honor_animals)%4 })
 
 def animalPage(request, animal_id):
     animal = get_object_or_404(Animal, animal_id=animal_id)

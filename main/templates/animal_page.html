@@ -179,28 +179,28 @@
                                 <span><button type="submit">전송</button></span>
                             </div>
                         </div>
-                        <div class="messages">
-                            <!-- message log -->
-                            {%for message in messages%}
-                            <div class ='message'>
-                                <div class ="writer">
-                                    <div style="font-weight: 800;">{{message.writer.user_nickname}}</div>
-                                    <div>
-                                        <span>{{message.pub_date|date:"Y.m.d"}}</span>
-                                        {%if user.username == message.writer.username%}
-                                        <span class="deleteMessage">
-                                            <a href="{% url 'deleteMessage' message.animal.animal_id message.message_id %}">
-                                            삭제
-                                            </a>
-                                        </span>
-                                        {%endif%}
-                                    </div>
-                                </div>
-                                <div class = "content">{{message.content}}</div>
-                            </div>
-                            {%endfor%}
-                        </div>
                     </form>
+                    <div class="messages">
+                        <!-- message log -->
+                        {%for message in messages%}
+                        <div class ='message'>
+                            <div class ="writer">
+                                <div style="font-weight: 800;">{{message.writer.user_nickname}}</div>
+                                <div>
+                                    <span>{{message.pub_date|date:"Y.m.d"}}</span>
+                                    {%if user.username == message.writer.username%}
+                                    <span class="deleteMessage">
+                                        <a href="{% url 'deleteMessage' message.animal.animal_id message.message_id %}">
+                                        삭제
+                                        </a>
+                                    </span>
+                                    {%endif%}
+                                </div>
+                            </div>
+                            <div class = "content">{{message.content}}</div>
+                        </div>
+                        {%endfor%}
+                    </div>
                 </div>
             </div>
         </div>
