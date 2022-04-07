@@ -6,7 +6,8 @@
 
 ## 1. 개요
 
-	<img src ="./img/whole_project.JPG" width=70% height=70%>
+![all](https://user-images.githubusercontent.com/70613905/162095645-1846fd0b-0a13-455c-85cd-15d69fc5b5db.png)
+
 
  * 주제 선정 배경
    * 반려동물을 잃은 슬픔을 서로 공감할 수 있는 사람들과 나눌 수 있는 공간이 있으면 좋겠다는 생각에서 시작됨
