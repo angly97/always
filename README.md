@@ -1,14 +1,13 @@
 # :dog: 또바기: 언제나 한결같이, 꼭 그렇게
 
->  하늘나라에 있는 반려동물에게 편지를 보낸다는 컨셉의 반려동물 추모 서비스
 
 
-
-## 1. 개요
+## Description
 
 ![all](https://user-images.githubusercontent.com/70613905/162095645-1846fd0b-0a13-455c-85cd-15d69fc5b5db.png)
 
 
+ * 하늘나라에 있는 반려동물에게 편지를 보낸다는 컨셉의 반려동물 추모 서비스
  * 주제 선정 배경
    * 반려동물을 잃은 슬픔을 서로 공감할 수 있는 사람들과 나눌 수 있는 공간이 있으면 좋겠다는 생각에서 시작됨
    * 다른이들과 추모하는 것 뿐만 아니라, 마음을 전할 수 없는 곳에 있는 동물에게 이 공간에서라도 편지를 쓸 수 있으면 좋겠다는 생각을 반영
@@ -25,7 +24,17 @@
 
 
 
-## 2. 시연 & 설명 동영상
+## Requirement
 
-* [hackathon always - YouTube](https://www.youtube.com/watch?v=PTzxTLcqRN0)
+* Python 3 or higher
+* Django 1.5 or higher
+
+
+
+## Test
+
+```bash
+# run server
+python manage.py runserver
+```
 
