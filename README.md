@@ -26,8 +26,8 @@
 
 ## Requirement
 
-* Python 3 or higher
-* Django 1.5 or higher
+* Python 2.7 or higher
+* Django
 
 
 
